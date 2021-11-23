@@ -192,14 +192,16 @@ type MachineConfigSpec struct {
 	// OSImageURL specifies the remote location that will be used to
 	// fetch the OS.
 	OSImageURL string `json:"osImageURL" protobuf:"bytes,1,opt,name=osImageURL"`
-	// Config is a Ignition Config object.
+	// Config is a Ignition Config object. see: https://pkg.go.dev/github.com/coreos/ignition/v2/config/v3_2/types#Config
 	Config runtime.RawExtension `json:"config" protobuf:"bytes,2,opt,name=config"`
-
+	// KernelArguments contains a list of kernel arguments to be added
 	// +nullable
 	KernelArguments []string `json:"kernelArguments" protobuf:"bytes,3,rep,name=kernelArguments"`
 	Extensions      []string `json:"extensions" protobuf:"bytes,4,rep,name=extensions"`
-
-	FIPS       bool   `json:"fips" protobuf:"varint,5,opt,name=fips"`
+	// FIPS controls FIPS mode
+	FIPS bool `json:"fips" protobuf:"varint,5,opt,name=fips"`
+	// KernelType contains which kernel we want to be running like default
+	// (traditional), realtime
 	KernelType string `json:"kernelType" protobuf:"bytes,6,opt,name=kernelType"`
 }
 
