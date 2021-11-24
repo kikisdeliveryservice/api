@@ -195,11 +195,16 @@ type MachineConfigSpec struct {
 	// Config is a Ignition Config object.
 	Config runtime.RawExtension `json:"config" protobuf:"bytes,2,opt,name=config"`
 
+	// kernelArguments contains a list of kernel arguments to be added
 	// +nullable
 	KernelArguments []string `json:"kernelArguments" protobuf:"bytes,3,rep,name=kernelArguments"`
-	Extensions      []string `json:"extensions" protobuf:"bytes,4,rep,name=extensions"`
+	// extensions contains a list of additional features that can be enabled on host
+	Extensions []string `json:"extensions" protobuf:"bytes,4,rep,name=extensions"`
 
-	FIPS       bool   `json:"fips" protobuf:"varint,5,opt,name=fips"`
+	// fips controls FIPS mode
+	FIPS bool `json:"fips" protobuf:"varint,5,opt,name=fips"`
+	// kernelType contains which kernel we want to be running like default
+	// (traditional), realtime.
 	KernelType string `json:"kernelType" protobuf:"bytes,6,opt,name=kernelType"`
 }
 
@@ -386,7 +391,11 @@ type KubeletConfigSpec struct {
 	AutoSizingReserved        *bool                 `json:"autoSizingReserved,omitempty" protobuf:"varint,1,opt,name=autoSizingReserved"`
 	LogLevel                  *int32                `json:"logLevel,omitempty" protobuf:"varint,2,opt,name=logLevel"`
 	MachineConfigPoolSelector *metav1.LabelSelector `json:"machineConfigPoolSelector,omitempty" protobuf:"bytes,3,opt,name=machineConfigPoolSelector"`
-	KubeletConfig             *runtime.RawExtension `json:"kubeletConfig,omitempty" protobuf:"bytes,4,opt,name=kubeletConfig"`
+	// kubeletConfig fields are defined in kubernetes upstream. Please refer to the types defined in the version/commit used by
+	// OpenShift of the upstream kubernetes. It's important to note that, since the fields of the kubelet configuration are directly fetched from
+	// upstream the validation of those values is handled directly by the kubelet. Please refer to the upstream version of the relevant kubernetes
+	// for the valid values of these fields. Invalid values of the kubelet configuration fields may render cluster nodes unusable.
+	KubeletConfig *runtime.RawExtension `json:"kubeletConfig,omitempty" protobuf:"bytes,4,opt,name=kubeletConfig"`
 
 	// If unset, the default is based on the apiservers.config.openshift.io/cluster resource.
 	// Note that only Old and Intermediate profiles are currently supported, and
